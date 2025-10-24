@@ -1,36 +1,39 @@
-import { Link, useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from 'react-router-dom';
 
-const ProductoDetalle = () => {
- 
-    const { id } = useParams();
-    const location = useLocation();
-    const producto = location.state?.producto;
- 
-if (!producto) {
-    return (
-      <div>
-        <p>No se pudo cargar el producto</p>
-        <Link to="/carrito">
-          <button>Volver a Productos</button>
-        </Link>
+function DetalleProdutos() {
+  const { id, categoria } = useParams();
+  const location = useLocation();
+  const { producto } = location.state; 
+
+  return (
+    <div className="card shadow-sm p-4">
+      <div className="row g-4">
+        {/* Columna de la Imagen */}
+        <div className="col-md-6 text-center">
+          <img 
+            src={producto.imagen} 
+            alt={producto.nombre} 
+            className="img-fluid rounded"
+            style={{ maxHeight: '400px', objectFit: 'contain' }}
+          />
+        </div>
+        
+        {/* Columna de la Info */}
+        <div className="col-md-6">
+          <span className="badge bg-secondary mb-2">{producto.categoria}</span>
+          <h2>{producto.nombre}</h2>
+          <p className="lead">{producto.descripcion}</p>
+          <h3 className="my-3 text-primary">${producto.precio.toFixed(2)}</h3>
+          
+          <p className="text-muted small">ID del producto: {id}</p>
+          
+          <Link to="/productos" className="btn btn-primary mt-3">
+            Volver a Productos
+          </Link>
+        </div>
       </div>
-    );
-  }
- 
-  return(
-    <>
-    <h2>Detalles del Producto {id}</h2>
-    <ul>
-        <li key={producto.id}>
-            {producto.nombre}
-            <br />
-            <p><strong>Descripción: </strong>{producto.descripcion}</p>
-            <p>Precio: ${producto.precio}</p>
-            <img src={producto.avatar} alt={producto.nombre} width="30%" />
-        </li>
-        <hr />
-        <Link to={`/productos`}><button>Volver</button></Link>
-    </ul>
-    </>
+    </div>
   );
-}; export default ProductoDetalle;
+}
+
+export default DetalleProdutos;

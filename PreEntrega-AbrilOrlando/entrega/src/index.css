@@ -1,16 +1,15 @@
-/* Dejamos un fondo suave y definimos la altura mínima */
 body {
-  background-color: #f8f9fa; /* Un gris muy claro de Bootstrap */
+  background-color: #f8f9fa;
 }
 
 main {
   min-height: 80vh;
 }
 
-/* Ajuste para que las imágenes de las cards no se estiren */
+
 .card-img-top {
   width: 100%;
   height: 250px;
-  object-fit: contain; /* 'contain' es mejor para productos */
+  object-fit: contain; 
   padding: 1rem;
 }

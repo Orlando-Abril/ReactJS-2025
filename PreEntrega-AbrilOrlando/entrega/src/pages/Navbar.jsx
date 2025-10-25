@@ -4,7 +4,6 @@ import { useAuthContext } from '../context/AuthContext.jsx';
 
 function Navbar() {
   const { carrito } = useCartContext();
-  // ¡Ahora 'usuario' contiene el 'role'!
   const { isAuthenticated, usuario, cerrarSesion } = useAuthContext();
 
   return (
@@ -16,7 +15,6 @@ function Navbar() {
           <span className="navbar-toggler-icon"></span>
         </button>
         
-        {/* MODIFICACIÓN AQUÍ */}
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto">
             <li className="nav-item">
@@ -25,7 +23,6 @@ function Navbar() {
             <li className="nav-item">
               <Link className="nav-link" to="/productos">Productos</Link>
             </li>
-            {/* LINK AÑADIDO */}
             <li className="nav-item">
               <Link className="nav-link" to="/servicios">Servicios</Link>
             </li>
@@ -37,11 +34,9 @@ function Navbar() {
               🛒 <span className="badge bg-secondary">{carrito.length}</span>
             </div>
 
-            {/* MODIFICACIÓN AQUÍ */}
             {isAuthenticated ? (
               <div className="text-white d-flex align-items-center">
                 
-                {/* LINK CONDICIONAL AÑADIDO (para admin) */}
                 {usuario.role === 'admin' && (
                   <Link to="/dashboard" className="btn btn-outline-warning btn-sm me-3">
                     Dashboard

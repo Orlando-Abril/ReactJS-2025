@@ -22,13 +22,11 @@ function App() {
         
         <main className="container mt-4">
           <Routes>
-            {/* Rutas que ya teníamos */}
             <Route path="/" element={<Inicio />} />
             <Route path="/productos" element={<Productos />} />
             <Route path="/productos/:categoria/:id" element={<DetalleProdutos />} />
             <Route path="/iniciar-sesion" element={<IniciarSesion />} />
 
-            {/* Ruta 'Pagar' (protegida por login) */}
             <Route
               path="/pagar"
               element={
@@ -38,12 +36,9 @@ function App() {
               }
             />
 
-            {/* ---- RUTAS NUEVAS ---- */}
 
-            {/* 1. Ruta de Servicios (pública) */}
             <Route path="/servicios" element={<Servicios />} />
 
-            {/* 2. Ruta de Dashboard (protegida por login Y por admin) */}
             <Route
               path="/dashboard"
               element={

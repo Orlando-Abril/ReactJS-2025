@@ -1,14 +1,12 @@
 import { useAuthContext } from '../context/AuthContext.jsx';
 
 function Dashboard() {
-  // Obtenemos los datos del admin logueado
   const { usuario } = useAuthContext();
 
   return (
     <div>
       <h2 className="mb-4">Dashboard de Administrador</h2>
       
-      {/* Usamos un 'alert' de Bootstrap */}
       <div className="alert alert-success">
         <h4 className="alert-heading">¡Bienvenido, {usuario.nombre}!</h4>
         <p>Este es el panel de administración.</p>

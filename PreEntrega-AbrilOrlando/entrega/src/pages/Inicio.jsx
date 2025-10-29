@@ -1,11 +1,10 @@
-import React from 'react'
-
 function Inicio() {
   return (
-    <>  
-    <h1>Bienvenidos al Incio</h1>
-    </>
-  )
+    <div>
+      <h2>¡Bienvenido a la Tienda!</h2>
+      <p>Esta es la página principal de nuestro e-commerce.</p>
+      <p>Usa la barra de navegación para ir a "Productos".</p>
+    </div>
+  );
 }
-
-export default Inicio
+export default Inicio;

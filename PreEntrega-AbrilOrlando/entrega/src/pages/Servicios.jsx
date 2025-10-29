@@ -8,16 +8,16 @@ function Servicios() {
       
       <ul className="list-group list-group-flush">
         <li className="list-group-item">
-          <strong>Organización de Torneos:</strong>
-          <p>Participa en torneos locales y en línea.</p>
+          <strong>Prendas a la moda:</strong>
+          <p>Participa de la moda actual con nuestros productos.</p>
         </li>
         <li className="list-group-item">
-          <strong>Alquiler de Juegos:</strong>
-          <p>Prueba juegos antes de comprarlos con nuestro servicio de alquiler.</p>
+          <strong>Accesorios de alta calidad:</strong>
+          <p>Aprovecha de nuestros accesorios de alta calidad y duración.</p>
         </li>
         <li className="list-group-item">
-          <strong>Mesas de Juego:</strong>
-          <p>Reserva una mesa en nuestra tienda para jugar con amigos.</p>
+          <strong>Tecnologia:</strong>
+          <p>Aprovecha de la tecnologia que tenemos para vos.</p>
         </li>
       </ul>
     </div>

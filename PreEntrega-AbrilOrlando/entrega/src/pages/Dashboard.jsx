@@ -7,10 +7,9 @@ export default function Dashboard() {
   const { usuario, cerrarSesion } = useAuthContext();
   const navigate = useNavigate();
 
-  // Obtener el token actual
   const tokenActual = localStorage.getItem('authToken');
 
-  // Función para navegar al formulario de agregar producto
+
   const manejarAgregarProducto = () => {
     navigate('/formulario-producto');
   };

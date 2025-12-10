@@ -3,7 +3,7 @@ import { useCartContext } from "../context/CartContext";
 import { useAuthContext } from "../context/AuthContext";
 import { useProducts } from "../context/ProductsContext";
 import { useState, useEffect } from "react";
-import { FaEdit, FaTrashAlt, FaSearch, FaShoppingCart, FaArrowLeft, FaArrowRight } from 'react-icons/fa'; // Importamos más iconos
+import { FaEdit, FaTrashAlt, FaSearch, FaShoppingCart, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 export default function Productos() {
   const { productos, cargando, error } = useProducts();
@@ -13,7 +13,7 @@ export default function Productos() {
 
   const [busqueda, setBusqueda] = useState("");
   const [paginaActual, setPaginaActual] = useState(1); 
-  const productosPorPagina = 6; // Aumentamos a 6 para un grid más agradable
+  const productosPorPagina = 6; 
 
   const manejarEliminar = (producto) => {
     navigate('/eliminar-producto', { state: { producto } });
@@ -36,7 +36,7 @@ export default function Productos() {
   const cambiarPagina = (numeroPagina) => {
     if (numeroPagina >= 1 && numeroPagina <= totalPaginas) {
       setPaginaActual(numeroPagina);
-      window.scrollTo(0, 0); // Scroll al inicio al cambiar de página
+      window.scrollTo(0, 0); 
     }
   };
 
@@ -45,7 +45,6 @@ export default function Productos() {
     setPaginaActual(1);
   };
 
-  // SEO nativo específico para la página Productos
   useEffect(() => {
     document.title = "Productos | Tienda de Juegos de Mesa";
 
@@ -63,14 +62,12 @@ export default function Productos() {
     updateMetaTag('keywords', 'juegos de mesa, comprar juegos de mesa, juegos históricos, juegos clásicos, juegos modernos, tienda de juegos');
     updateMetaTag('robots', 'index, follow');
 
-    // Open Graph
     updateMetaTag('og:title', 'Productos - Tienda de Juegos de Mesa', 'property');
     updateMetaTag('og:description', 'Explora nuestro catálogo de juegos de mesa. Encuentra títulos clásicos, modernos y educativos.', 'property');
     updateMetaTag('og:type', 'website', 'property');
     updateMetaTag('og:image', window.location.origin + '/logo.jpg', 'property');
     updateMetaTag('og:url', window.location.origin + '/productos', 'property');
 
-    // Canonical
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) {
       canonical = document.createElement('link');
@@ -91,7 +88,6 @@ export default function Productos() {
       </header>
 
       <div className="container mt-4">
-        {/* Barra de búsqueda */}
         <div className="row mb-5 justify-content-center">
           <div className="col-12 col-md-8 col-lg-6">
             <div className="input-group shadow-sm">
@@ -118,7 +114,7 @@ export default function Productos() {
             </div>
         )}
 
-        {/* Grid de productos - Usando Grid de Bootstrap (3 columnas en lg, 2 en md) */}
+
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
           {productosActuales.map((producto) => (
             <div key={producto.id} className="col">
@@ -183,7 +179,6 @@ export default function Productos() {
           ))}
         </div>
 
-        {/* Paginador */}
         {productosFiltrados.length > productosPorPagina && (
           <div className="d-flex justify-content-center my-5">
             <button
@@ -211,7 +206,6 @@ export default function Productos() {
           </div>
         )}
 
-        {/* Información de la página actual */}  
         {productosFiltrados.length > 0 && (
           <div className="text-center text-muted mt-2 mb-5">
             <small>

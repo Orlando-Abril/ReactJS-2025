@@ -1,8 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
-import { FaPlay, FaInfoCircle } from 'react-icons/fa'; // Iconos para jugar e info
+import { FaPlay, FaInfoCircle } from 'react-icons/fa'; 
 
-// Definimos un contenedor estilizado para toda la sección de inicio
 const HeroContainer = styled.div`
   /* Fondo suave o un color que complemente el navbar (Dark Slate Gray: #2F4F4F) */
   background-color: #E6E6FA; /* Lavender Blush, color muy suave y cálido */
@@ -87,12 +86,10 @@ function Inicio() {
 
           <hr className="my-5" />
 
-          {/* Sección de Enlaces y CTAs */}
           <div className="row justify-content-center text-center">
             <div className="col-12 col-md-10">
               <h3 className="h5 mb-4 text-secondary">Recursos y Experiencias</h3>
               <div className="d-flex flex-wrap justify-content-center gap-3">
-                {/* Botones Primarios (Jugar) */}
                 <a 
                     href="https://play.google.com/store/apps/details?id=air.EgyptianSenetFree&hl=es" 
                     className="btn btn-success btn-lg d-flex align-items-center gap-2"
@@ -108,7 +105,6 @@ function Inicio() {
               </div>
               
               <div className="d-flex flex-wrap justify-content-center gap-3 mt-3">
-                {/* Botones Secundarios (Info) */}
                 <a 
                     href="https://www.man.es/man/en/educacion/recursos/juegos.html" 
                     target="_blank" 

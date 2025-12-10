@@ -19,7 +19,6 @@ function Carrito() {
   };
 
   return (
-    // Card fija para el sidebar con diseño mejorado
     <div className="card shadow-lg border-0" style={{ top: '20px' }}>
       <div className="card-header bg-dark text-white d-flex align-items-center gap-2">
         <FaShoppingCart size={20} />
@@ -30,7 +29,7 @@ function Carrito() {
           <p className="text-center text-muted m-0 p-3">El carrito está vacío. ¡Agrega productos!</p>
         ) : (
           <>
-            {/* Lista de productos en el carrito */}
+
             <ul className="list-group list-group-flush mb-3">
               {carrito.map(item => (
                 <li key={item.id} className="list-group-item px-0 d-flex justify-content-between align-items-center">

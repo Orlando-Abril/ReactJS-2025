@@ -1,12 +1,12 @@
 import { Link, useParams, useLocation } from "react-router-dom";
 import { useCartContext } from "../context/CartContext";
-import { FaTag, FaInfoCircle, FaDollarSign, FaArrowLeft, FaShoppingCart } from 'react-icons/fa'; // Iconos
+import { FaTag, FaInfoCircle, FaDollarSign, FaArrowLeft, FaShoppingCart } from 'react-icons/fa'; 
 
 const ProductoDetalle = () => {
     const { id } = useParams();
     const location = useLocation();
     const producto = location.state?.producto;
-    const { agregarAlCarrito, formatearNumeroArgentino } = useCartContext(); // Importamos funciones
+    const { agregarAlCarrito, formatearNumeroArgentino } = useCartContext(); 
 
     if (!producto) {
         return (
@@ -29,7 +29,6 @@ const ProductoDetalle = () => {
             <div className="card shadow-lg border-0">
                 <div className="row g-0">
                    
-                    {/* Columna para la imagen - IZQUIERDA (md-6) */}
                     <div className="col-md-6 p-4 d-flex justify-content-center align-items-center bg-light rounded-start">
                         <img
                             src={producto.avatar}
@@ -39,8 +38,7 @@ const ProductoDetalle = () => {
                         />
                     </div>
 
-
-                    {/* Columna para la información - DERECHA (md-6) */}  
+  
                     <div className="col-md-6">
                         <div className="card-body p-4">
                             <h1 className="h3 text-primary mb-3">{producto.nombre}</h1>

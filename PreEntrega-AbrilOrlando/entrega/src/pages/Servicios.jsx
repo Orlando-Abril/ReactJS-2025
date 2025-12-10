@@ -30,7 +30,6 @@ function Servicios() {
 
 export default Servicios
 
-// Styled Component para limitar el ancho del texto y centrar el contenido
 const ContenedorServicios = styled.div`
   max-width: 1000px; /* Limitar el ancho para mejor legibilidad */
   margin: auto;

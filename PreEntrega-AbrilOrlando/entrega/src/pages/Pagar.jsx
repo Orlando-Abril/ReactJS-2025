@@ -18,7 +18,6 @@ export default function Pagar() {
 
   const tokenActual = localStorage.getItem("authToken");
 
-  // Función para finalizar compra
   const comprar = () => {
     alert("¡Compra realizada con éxito!");
     vaciarCarrito();
@@ -32,7 +31,6 @@ export default function Pagar() {
         <h2 className="h4 d-flex align-items-center gap-2 text-dark"><FaUserCircle size={20} /> Hola {usuario.nombre}</h2>
         <p className="text-muted small">Email: {usuario.email}</p>
 
-        {/* Estilo para el Token (sólo si es admin) */}
         {usuario.nombre === 'admin' && (
             <div className="bg-light p-2 rounded small my-3 border">
               <strong>Token:</strong> 

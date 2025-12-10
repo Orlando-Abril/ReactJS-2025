@@ -11,7 +11,7 @@ function RutaProtegida({ children, soloAdmin = false }) {
   }
  
   if (!usuario) {
-    // Pasa el state actual (que puede contener el carrito) a /login
+
     return <Navigate to="/iniciar-sesion" state={location.state} replace />;
   }
 

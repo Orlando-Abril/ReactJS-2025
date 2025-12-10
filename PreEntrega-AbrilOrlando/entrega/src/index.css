@@ -1,6 +1,3 @@
-/* src/index.css: Limpiar estilos globales, la mayoría se manejan en styled-components */
-
-/* Opcional: Reset básico para asegurar la base */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -8,13 +5,12 @@
 }
 
 body {
-  /* Establecer una fuente base si se desea, o usar la fuente por defecto de Bootstrap/navegador */
+
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f7f7f7; /* Fondo sutil para dar sensación de profundidad */
+  background-color: #f7f7f7;
 }
 
-/* El resto de los estilos están en los componentes con styled-components y Bootstrap */

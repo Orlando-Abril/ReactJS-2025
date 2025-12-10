@@ -22,7 +22,7 @@ function Navbar() {
 
   return (
     <>
-      {/* Usamos fixed-top para que el navbar siempre esté visible arriba */}
+
       <NavbarContainer className="navbar navbar-expand-lg navbar-dark fixed-top">
         <div className="container-fluid px-4">
           <Logo to="/" className="navbar-brand">Juegos de Mesa</Logo>
@@ -77,7 +77,6 @@ function Navbar() {
               {/* 2. Sección de Usuario/Login */}
               {isAuthenticated ? (
                 <ContenedorUsuario className="d-flex align-items-center gap-3">
-                  {/* Nombre y Rol */}
                   <Bienvenida className='d-flex align-items-center'>
                     <FaUserCircle size={18} className='me-1' />
                     Hola, {usuario.nombre} {esAdmin && '(Admin)'}
@@ -103,7 +102,7 @@ function Navbar() {
           </div>
         </div>
       </NavbarContainer>
-      {/* Spacer para evitar que el contenido quede debajo del fixed-top navbar */}
+
       <NavbarSpacer />
     </>
   )

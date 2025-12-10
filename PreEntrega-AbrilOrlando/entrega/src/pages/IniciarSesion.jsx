@@ -1,57 +1,82 @@
-import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuthContext } from '../context/AuthContext.jsx';
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
 
-function IniciarSesion() {
-  const [nombre, setNombre] = useState('');
-  const [email, setEmail] = useState(''); 
-  
+export default function IniciarSesion() {
   const { iniciarSesion } = useAuthContext();
   const navigate = useNavigate();
-  const location = useLocation();
-  
-  const from = location.state?.from?.pathname || "/productos";
+  const ubicacion = useLocation();
 
-  const handleSubmit = (e) => {
+  const [formulario, setFormulario] = useState({ nombre: "", email: "" });
+
+  const manejarEnvio = (e) => {
     e.preventDefault();
-    if (nombre.trim() === '') return alert("Debe ingresar un nombre");
+    
+    // Verificar credenciales (admin/1234@admin)
+    if (formulario.nombre === "admin" && formulario.email === "1234@admin") {
+      // Guarda el email ingresado y pasa nombre para el token admin
+      localStorage.setItem("authEmail", formulario.email);
+      iniciarSesion("admin", formulario.email );
+      navigate("/dashboard");
+    }
+    // Lógica para usuarios normales - SOLO si NO es admin
+    else if (
+      formulario.nombre &&
+      formulario.email &&
+      formulario.nombre !== "admin"
+    ) {
+  // Guarda el email ingresado y pasa nombre para el token user
+  localStorage.setItem("authEmail", formulario.email);
+  iniciarSesion(formulario.nombre, formulario.email) ;
 
-    iniciarSesion(nombre); 
-    navigate(from, { replace: true }); 
+      // Si venía del carrito, redirige a pagar
+      if (ubicacion.state?.carrito) {
+        navigate("/pagar", { state: { carrito: ubicacion.state.carrito } });
+      } else {
+        navigate("/productos");
+      }
+    } else {
+      alert(
+        "Credenciales de administrador incorrectas. Usa: admin / 1234@admin"
+      );
+    }
   };
 
   return (
-    <div className="row justify-content-center">
-      <div className="col-lg-6">
-        <div className="card shadow-sm p-4">
-          <h2 className="text-center mb-4">Iniciar Sesión</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="nombre" className="form-label">Nombre (Simulado):</label>
-              <input
-                type="text"
-                id="nombre"
-                className="form-control"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">Email (Simulado):</label>
-              <input
-                type="email"
-                id="email"
-                className="form-control"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <button type="submit" className="btn btn-primary w-100">Ingresar</button>
-          </form>
-        </div>
-      </div>
+    <div className="container mt-5 mb-5">
+      <h1>Inicia sesión para continuar</h1>
+      <form onSubmit={manejarEnvio}>
+        <input 
+        className="me-2"
+          type="text"
+          placeholder="Nombre completo"
+          value={formulario.nombre}
+          onChange={(e) =>
+            setFormulario({ ...formulario, nombre: e.target.value })
+          }
+          required
+        />
+        <input
+        className="me-2"
+          type="email"
+          placeholder="Email"
+          value={formulario.email}
+          onChange={(e) =>
+            setFormulario({ ...formulario, email: e.target.value })
+          }
+          required
+        />
+        <hr/>
+        <button type="submit">Iniciar Sesión</button>
+        <strong> </strong>
+        <button type="button" onClick={() => navigate("/productos")}>
+          Cancelar
+        </button>
+      </form>
+      <p style={{ marginTop: "20px", fontSize: "12px", color: "#666" }}>
+        <strong>¿No recuerdas tus credenciales de admin?</strong>
+        </p>
+
     </div>
   );
 }
-
-export default IniciarSesion;

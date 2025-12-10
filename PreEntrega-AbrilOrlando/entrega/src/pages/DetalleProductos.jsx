@@ -1,39 +1,82 @@
-import { useParams, useLocation, Link } from 'react-router-dom';
+import { Link, useParams, useLocation } from "react-router-dom";
 
-function DetalleProdutos() {
-  const { id, categoria } = useParams();
-  const location = useLocation();
-  const { producto } = location.state; 
 
-  return (
-    <div className="card shadow-sm p-4">
-      <div className="row g-4">
-        {/* Columna de la Imagen */}
-        <div className="col-md-6 text-center">
-          <img 
-            src={producto.imagen} 
-            alt={producto.nombre} 
-            className="img-fluid rounded"
-            style={{ maxHeight: '400px', objectFit: 'contain' }}
-          />
+const ProductoDetalle = () => {
+ 
+    const { id } = useParams();
+    const location = useLocation();
+    const producto = location.state?.producto;
+ 
+    // if (!producto) {
+    //     return (
+    //         <div className="container-md py-3">
+    //             <div className="alert alert-warning">
+    //                 <h4>Producto no encontrado</h4>
+    //                 <p>No se pudo cargar la información del producto</p>
+    //                 <Link to="/carrito" className="btn btn-primary">
+    //                     Volver a Productos
+    //                 </Link>
+    //             </div>
+    //         </div>
+    //     );
+    // }
+ 
+    return (
+        <div className="container-md py-3">
+            <h2 className="mb-3">Detalles del Producto</h2>
+           
+            {/* Fila Superior: para separar en 2 columnas */}
+            <div className="row align-items-start g-0 mb-4">
+               
+                {/* Columna para la imagen - IZQUIERDA (md-6) */}
+                <div className="col-md-6">
+                    <div className="card border-0">
+                        <div className="card-body text-center p-2">
+                            <img
+                                src={producto.avatar}
+                                alt={producto.nombre}
+                                className="img-fluid rounded w-75"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+
+                {/* Columna para la información - DERECHA (md-6) */}  
+                <div className="col-md-6">
+                    <div className="card border-0">
+                        <div className="card-body p-1">
+
+
+                            <h4 className="text-primary mb-2">{producto.nombre}</h4>
+                           
+                            <div className="mb-2">
+                                <strong>Descripción:</strong>
+                                <p className="card-text mb-1">{producto.descripcion}</p>
+                            </div>
+                           
+                            <div className="mb-2">
+                                <strong>Categoría:</strong>
+                                <span className="badge bg-secondary ms-1">{producto.categoria}</span>
+                            </div>
+                   
+                            <div className="mb-3">
+                                <strong>Precio:</strong>
+                                <h5 className="text-success d-inline ms-1">${producto.precio}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+            {/* Fila Inferior: Botón de Volver (col-12) */}
+            <div className="row">
+                <div className="col-12 text-center mt-3">
+                    <Link to={`/productos`} className="btn btn-secondary w-50">
+                        Volver a Productos
+                    </Link>
+                </div>
+            </div>
         </div>
-        
-        {/* Columna de la Info */}
-        <div className="col-md-6">
-          <span className="badge bg-secondary mb-2">{producto.categoria}</span>
-          <h2>{producto.nombre}</h2>
-          <p className="lead">{producto.descripcion}</p>
-          <h3 className="my-3 text-primary">${producto.precio.toFixed(2)}</h3>
-          
-          <p className="text-muted small">ID del producto: {id}</p>
-          
-          <Link to="/productos" className="btn btn-primary mt-3">
-            Volver a Productos
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default DetalleProdutos;
+    );
+}; export default ProductoDetalle;

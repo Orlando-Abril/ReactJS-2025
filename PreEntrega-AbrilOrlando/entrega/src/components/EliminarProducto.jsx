@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { FaTrashAlt, FaTimesCircle, FaSpinner } from 'react-icons/fa'; // Iconos
 
 function EliminarProducto() {
   const location = useLocation();
@@ -51,71 +52,57 @@ function EliminarProducto() {
 
 
   return (
-    <div style={{ maxWidth: '500px', margin: '40px auto', padding: '20px', textAlign: 'center' }}>
-      <h2 style={{ color: '#dc3545', marginBottom: '20px' }}>Eliminar Producto</h2>
-     
-      <div style={{
-        border: '1px solid #ddd',
-        borderRadius: '8px',
-        padding: '20px',
-        marginBottom: '30px',
-        backgroundColor: '#f8f9fa'
-      }}>
-        <h3 style={{ color: '#dc3545' }}>¿Estás seguro de que deseas eliminar este producto?</h3>
+    <div className="container my-5" style={{ maxWidth: '600px' }}>
+      <div className="p-4 shadow rounded-3 bg-white text-center">
+        <h2 className="text-danger mb-4">Eliminar Producto</h2>
        
-        <div style={{ textAlign: 'left', margin: '20px 0' }}>
-          <p><strong>Nombre:</strong> {producto.nombre}</p>
-          <p><strong>Precio:</strong> ${producto.precio}</p>
-          <p><strong>Categoría:</strong> {producto.categoria || 'Sin categoría'}</p>
-          <p><strong>Descripción:</strong> {producto.descripcion}</p>
-          {producto.avatar && (
+        <div className="alert alert-danger" role="alert">
+          <h4 className="alert-heading">¡Advertencia!</h4>
+          <p>Estás a punto de eliminar el siguiente producto de forma permanente:</p>
+        </div>
+
+        <div className="text-start mb-4 p-3 border rounded">
+          <h3 className="h5 text-primary">Detalles del Producto:</h3>
+          <p className="mb-1"><strong>Nombre:</strong> {producto?.nombre}</p>
+          <p className="mb-1"><strong>Precio:</strong> ${producto?.precio}</p>
+          <p className="mb-1"><strong>Categoría:</strong> {producto?.categoria || 'Sin categoría'}</p>
+          <p className="mb-1"><strong>Descripción:</strong> {producto?.descripcion}</p>
+          {producto?.avatar && (
             <img
               src={producto.avatar}
               alt="Producto a eliminar"
-              style={{ maxWidth: '200px', marginTop: '10px' }}
+              className="img-fluid rounded mt-2"
+              style={{ maxWidth: '150px', maxHeight: '150px', objectFit: 'cover' }}
             />
           )}
         </div>
 
 
-        <p style={{ color: '#666', fontStyle: 'italic' }}>
+        <p className="text-muted small fst-italic">
           Esta acción no se puede deshacer. El producto será eliminado permanentemente.
         </p>
-      </div>
 
 
-      <div style={{ display: 'flex', gap: '15px', justifyContent: 'center' }}>
-        <button
-          onClick={manejarEliminar}
-          disabled={cargando}
-          style={{
-            padding: '12px 24px',
-            backgroundColor: cargando ? '#ccc' : '#dc3545',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: cargando ? 'not-allowed' : 'pointer',
-            fontSize: '16px'
-          }}
-        >
-          {cargando ? 'Eliminando...' : 'Sí, Eliminar'}
-        </button>
-       
-        <button
-          onClick={() => navigate('/productos')}
-          disabled={cargando}
-          style={{
-            padding: '12px 24px',
-            backgroundColor: cargando ? '#ccc' : '#6c757d',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: cargando ? 'not-allowed' : 'pointer',
-            fontSize: '16px'
-          }}
-        >
-          Cancelar
-        </button>
+        <div className="d-flex gap-3 justify-content-center mt-4">
+          <button
+            onClick={manejarEliminar}
+            disabled={cargando}
+            className="btn btn-danger btn-lg d-flex align-items-center gap-2"
+          >
+            {cargando 
+              ? <><FaSpinner className="spin-icon" /> Eliminando...</> 
+              : <><FaTrashAlt /> Sí, Eliminar</>
+            }
+          </button>
+         
+          <button
+            onClick={() => navigate('/productos')}
+            disabled={cargando}
+            className="btn btn-secondary btn-lg d-flex align-items-center gap-2"
+          >
+            <FaTimesCircle /> Cancelar
+          </button>
+        </div>
       </div>
     </div>
   );

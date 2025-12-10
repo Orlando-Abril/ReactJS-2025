@@ -4,7 +4,7 @@ function Footer() {
   return (
     <footer>
         <hr />
-        <p>Desarrolado por: @mati.campos</p>
+        <p>Desarrolado por: Abril Orlando</p>
     </footer>
   )
 }

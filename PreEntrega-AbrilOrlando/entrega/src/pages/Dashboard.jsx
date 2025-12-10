@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaPlusCircle, FaListAlt, FaSignOutAlt } from 'react-icons/fa'; // Iconos
 
 export default function Dashboard() {
   const { usuario, cerrarSesion } = useAuthContext();
@@ -15,74 +16,47 @@ export default function Dashboard() {
   };
 
   return (
-    <div style={{ padding: '20px', minHeight: '60vh' }}>
-      <h1>Dashboard Administrativo</h1>
-      <div style={{ background: '#f5f5f5', padding: '20px', borderRadius: '8px' }}>
-        <p><strong>Sesión iniciada como: </strong> {usuario.nombre}</p>
+    <div className="container my-5" style={{ minHeight: '60vh' }}>
+      <h1 className="display-5 fw-bold mb-4 text-primary">Dashboard Administrativo</h1>
+      <div className="p-4 shadow-lg rounded-3 bg-light">
+        <h2 className="h4 mb-3">Información del Administrador</h2>
+        <p className="lead"><strong>Sesión iniciada como: </strong> <span className="badge bg-danger fs-6">{usuario.nombre}</span></p>
        
         {/* TOKEN */}
-        <div style={{
-          background: '#e9ecef',
-          padding: '10px',
-          borderRadius: '4px',
-          margin: '10px 0',
-          fontSize: '14px',
-        }}>
-          <strong>Token de autenticación:</strong>
-          <br />
-          <code>{tokenActual}</code>
+        <div className="bg-white p-3 rounded-3 my-4 border">
+          <p className="mb-1 small text-muted">Token de autenticación (Solo para demostración):</p>
+          <code className="text-break d-block">{tokenActual}</code>
         </div>
 
         {/* SECCIÓN DE ACCIONES ADMIN */}
-        <div style={{ margin: '20px 0' }}>
-          <h3>Acciones:</h3>
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '10px' }}>
+        <div className="my-4 pt-3 border-top">
+          <h3 className="h5 mb-3 text-secondary">Panel de Acciones:</h3>
+          <div className="d-grid gap-3 d-md-flex justify-content-start">
             <button
               onClick={manejarAgregarProducto}
-              style={{
-                padding: '10px 20px',
-                background: '#28a745',
-                color: 'white',
-                textDecoration: 'none',
-                borderRadius: '4px',
-                border: 'none',
-                cursor: 'pointer',
-                display: 'inline-block'
-              }}
+              className="btn btn-success btn-lg d-flex align-items-center justify-content-center gap-2"
             >
-              Agregar Productos
+              <FaPlusCircle />
+              Agregar Nuevo Producto
             </button>
            
             <Link
               to="/productos"
-              style={{
-                padding: '10px 20px',
-                background: '#17a2b8',
-                color: 'white',
-                textDecoration: 'none',
-                borderRadius: '4px',
-                display: 'inline-block'
-              }}
+              className="btn btn-info btn-lg d-flex align-items-center justify-content-center gap-2"
             >
-              Ver / Editar / Eliminar Productos
+              <FaListAlt />
+              Ver / Editar Productos
             </Link>
           </div>
         </div>
-        <hr></hr>
+        <hr/>
        
         {/* BOTÓN CERRAR SESIÓN */}
         <button
           onClick={cerrarSesion}
-          style={{
-            padding: '10px 20px',
-            background: '#dc3545',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            marginTop: '10px'
-          }}
+          className="btn btn-danger mt-3 d-flex align-items-center gap-2"
         >
+          <FaSignOutAlt />
           Cerrar sesión
         </button>
       </div>

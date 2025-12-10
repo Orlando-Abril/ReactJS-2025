@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuthContext } from '../context/AuthContext';
 import { useCartContext } from '../context/CartContext';
 import styled from 'styled-components';
-import { FaShoppingCart } from 'react-icons/fa';
+import { FaShoppingCart, FaUserCircle, FaTachometerAlt, FaPlusSquare } from 'react-icons/fa';
 
 function Navbar() {
   const { usuario, isAuthenticated, cerrarSesion, esAdmin } = useAuthContext();
@@ -22,9 +22,10 @@ function Navbar() {
 
   return (
     <>
+      {/* Usamos fixed-top para que el navbar siempre esté visible arriba */}
       <NavbarContainer className="navbar navbar-expand-lg navbar-dark fixed-top">
-        <div className="container-fluid">
-          <Logo to="/" className="navbar-brand">Juegos</Logo>
+        <div className="container-fluid px-4">
+          <Logo to="/" className="navbar-brand">Juegos de Mesa</Logo>
           
           <button 
             className="navbar-toggler" 
@@ -49,18 +50,22 @@ function Navbar() {
               <li className="nav-item">
                 <NavLink to="/productos" className="nav-link">Productos</NavLink>
               </li>
+              {/* Opción más directa para Admin */}
               {esAdmin && (
                 <li className="nav-item">
-                  <NavLink to="/formulario-producto" className="nav-link">Agregar Producto</NavLink>
+                  <NavLink to="/formulario-producto" className="nav-link d-flex align-items-center gap-1">
+                    <FaPlusSquare size={16}/>
+                    Agregar Producto
+                  </NavLink>
                 </li>
               )}
             </ul>
 
             <SeccionUsuario className="d-flex align-items-center gap-3">
+              {/* 1. Carrito de Compras */}
               <ContenedorCarrito> 
                 <IconoCarrito to="/pagar" className="nav-link d-flex align-items-center">
-                  <span className="me-1">Carrito</span>
-                  <FaShoppingCart />  
+                  <FaShoppingCart size={20} />  
                   {totalItemsCarrito > 0 && (
                     <ContadorCarrito>
                       {totalItemsCarrito}
@@ -69,25 +74,36 @@ function Navbar() {
                 </IconoCarrito>
               </ContenedorCarrito>
 
+              {/* 2. Sección de Usuario/Login */}
               {isAuthenticated ? (
                 <ContenedorUsuario className="d-flex align-items-center gap-3">
-                  <Bienvenida>Hola, {usuario.nombre}</Bienvenida>
+                  {/* Nombre y Rol */}
+                  <Bienvenida className='d-flex align-items-center'>
+                    <FaUserCircle size={18} className='me-1' />
+                    Hola, {usuario.nombre} {esAdmin && '(Admin)'}
+                  </Bienvenida>
                  
+                  {/* Dashboard para Admin */}
                   {esAdmin && (
-                    <NavLinkAdmin to="/dashboard" className="nav-link">Dashboard</NavLinkAdmin>
+                    <NavLinkAdmin to="/dashboard" className="nav-link d-flex align-items-center gap-1">
+                      <FaTachometerAlt size={14}/>
+                      Dashboard
+                    </NavLinkAdmin>
                   )}
                  
-                  <BotonCerrarSesion onClick={manejarCerrarSesion} className="btn btn-outline-light btn-sm">
+                  {/* Botón de Cerrar Sesión */}
+                  <BotonCerrarSesion onClick={manejarCerrarSesion} className="btn btn-sm">
                     Cerrar Sesión
                   </BotonCerrarSesion>
                 </ContenedorUsuario>
               ) : (
-                <NavLink to="/iniciar-sesion" className="nav-link">Iniciar Sesión</NavLink>
+                <BotonLogin to="/iniciar-sesion" className="btn btn-sm">Iniciar Sesión</BotonLogin>
               )}
             </SeccionUsuario>
           </div>
         </div>
       </NavbarContainer>
+      {/* Spacer para evitar que el contenido quede debajo del fixed-top navbar */}
       <NavbarSpacer />
     </>
   )
@@ -95,79 +111,76 @@ function Navbar() {
 
 export default Navbar;
 
-// Styled Components actualizados
+// Styled Components
 const NavbarContainer = styled.nav`
-  background-color: #556B2F !important;
-  padding: 0.5rem 1rem;
+  background-color: #2F4F4F !important; /* Gris-Verde Oscuro (Dark Slate Gray) - Color más sobrio */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.8rem 1rem;
 `;
 
 const NavbarSpacer = styled.div`
-  height: 80px;
+  /* Ajustar el espacio para el navbar fixed-top */
+  height: 65px; 
 
   @media (max-width: 991.98px) {
-    height: 76px;
+    /* Ajuste para móviles cuando el navbar se colapsa */
+    height: 60px;
   }
 `;
 
 const Logo = styled(Link)`
-  color: white !important;
-  font-size: 1.5rem;
-  font-weight: bold;
+  color: #F0E68C !important; /* Caqui Oscuro - Destaca el logo */
+  font-size: 1.8rem;
+  font-weight: 700;
   text-decoration: none;
  
   &:hover {
-    color: white !important;
+    color: #FFD700 !important; /* Dorado en hover */
   }
 `;
 
-// NavLink normal (para usuarios)
 const NavLink = styled(Link)`
-  color: white !important;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
+  color: #FFFFFF !important;
+  font-weight: 400;
+  border-radius: 6px;
+  transition: background-color 0.3s, color 0.3s;
  
   &:hover {
-    color: white !important;
-    text-decoration: underline;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #F0E68C !important;
   }
 `;
 
-// NavLink especial para admin
-const NavLinkAdmin = styled(Link)`
-  color: black !important;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  font-weight: bold;
- 
+const NavLinkAdmin = styled(NavLink)`
+  color: #98FB98 !important; /* Menta para admin */
+  font-weight: 600;
+  border: 1px solid #98FB98;
+  padding: 0.4rem 0.8rem;
+
   &:hover {
-    color: gold !important;
-    text-decoration: underline;
+    background-color: #98FB98;
+    color: #2F4F4F !important;
   }
 `;
 
 const Bienvenida = styled.span`
-  color: white;
+  color: #FFFFFF;
   font-size: 0.9rem;
   margin: 0;
   white-space: nowrap;
-
-  @media (max-width: 991.98px) {
-    margin-bottom: 0.5rem;
-  }
 `;
 
 const BotonCerrarSesion = styled.button`
-  background: transparent;
+  background: #DC143C; /* Rojo Carmesí */
   color: white;
-  border: 1px solid white;
+  border: none;
   border-radius: 4px;
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 1rem;
   cursor: pointer;
   white-space: nowrap;
  
   &:hover {
-    background: white;
-    color: #556B2F;
+    background: #B22222; /* Rojo Ladrillo más oscuro */
   }
 
   @media (max-width: 991.98px) {
@@ -176,41 +189,49 @@ const BotonCerrarSesion = styled.button`
   }
 `;
 
+const BotonLogin = styled(Link)`
+  background: #3CB371; /* Verde Medio Mar */
+  color: white !important;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+
+  &:hover {
+    background: #2E8B57; /* Verde Oscuro Mar */
+  }
+`;
+
 const ContenedorCarrito = styled.div`
   position: relative;
-  display: flex;
-  align-items: center;
 `;
 
 const IconoCarrito = styled(Link)`
-  color: white !important;
-  text-decoration: none;
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  position: relative;
-  font-size: 1rem;
-  gap: 5px;
- 
+  color: #FFFFFF !important;
+  transition: color 0.3s;
+  
   &:hover {
-    color: gold !important;
+    color: #F0E68C !important; 
   }
 `;
 
 const ContadorCarrito = styled.span`
   position: absolute;
   top: -5px;
-  right: -5px;
-  background: red;
+  right: -15px;
+  background: #FF4500; /* Rojo Naranja Brillante */
   color: white;
   border-radius: 50%;
-  width: 20px;
+  min-width: 20px;
   height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
   font-weight: bold;
+  padding: 2px;
 `;
 
 const SeccionUsuario = styled.div`
@@ -219,10 +240,14 @@ const SeccionUsuario = styled.div`
   align-items: center;
 
   @media (max-width: 991.98px) {
-    flex-direction: column;
+    /* Ajuste para que los elementos se apilen correctamente en móviles */
+    flex-direction: column; 
+    align-items: flex-start; 
     gap: 0.5rem;
     margin-top: 1rem;
     width: 100%;
+    padding-bottom: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 `;
 
@@ -233,7 +258,20 @@ const ContenedorUsuario = styled.div`
 
   @media (max-width: 991.98px) {
     flex-direction: column;
+    align-items: flex-start; 
     gap: 0.5rem;
     width: 100%;
+
+    ${Bienvenida} {
+        width: 100%;
+        text-align: left;
+    }
+    ${NavLinkAdmin} {
+        width: 100%;
+        text-align: center;
+    }
+    ${BotonCerrarSesion} {
+        width: 100%;
+    }
   }
 `;

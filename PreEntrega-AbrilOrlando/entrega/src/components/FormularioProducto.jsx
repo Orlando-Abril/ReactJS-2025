@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useProducts } from '../context/ProductsContext';
+import styled from 'styled-components'; // Importamos styled-components para el contenedor
+import { FaSave, FaTimesCircle, FaSpinner } from 'react-icons/fa'; // Iconos
 
 function FormularioProducto() {
   const navigate = useNavigate();
@@ -123,180 +125,163 @@ function FormularioProducto() {
 
   // Renderizado del componente
   return (
-    <form onSubmit={manejarEnvio} style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
-      <h2>{modo === "editar" ? 'Editar' : 'Agregar'} Producto</h2>
+    <FormContainer className="container my-5">
+      <h2 className="text-center mb-4">{modo === "editar" ? 'Editar Producto' : 'Agregar Nuevo Producto'}</h2>
      
-      {modo === "editar" && productoRecibido && (
-        <p style={{ color: '#666', fontStyle: 'italic' }}>
-          Editando: {productoRecibido.nombre} (ID: {productoRecibido.id})
-        </p>
-      )}
-     
-      {/* Campo Nombre */}
-      <div style={{ marginBottom: '15px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-          Nombre: *
-        </label>
-        <input
-          type="text"
-          name="nombre"
-          value={producto.nombre}
-          onChange={manejarCambio}
-          disabled={cargando}
-          style={{
-            width: '100%',
-            padding: '8px',
-            border: `1px solid ${errores.nombre ? 'red' : '#ccc'}`,
-            borderRadius: '4px'
-          }}
-          placeholder="Ingrese el nombre del producto"
-        />
-        {errores.nombre && <p style={{ color: 'red', margin: '5px 0', fontSize: '14px' }}>{errores.nombre}</p>}
-      </div>
-
-      {/* Campo Precio */}
-      <div style={{ marginBottom: '15px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-          Precio: *
-        </label>
-        <input
-          type="text"
-          name="precio"
-          value={producto.precio}
-          onChange={manejarCambio}
-          disabled={cargando}
-          placeholder="Ej: 40.000"
-          inputMode="decimal"
-          style={{
-            width: '100%',
-            padding: '8px',
-            border: `1px solid ${errores.precio ? 'red' : '#ccc'}`,
-            borderRadius: '4px'
-          }}
-        />
-        <div style={{ fontSize: '12px', color: '#666', marginTop: '5px' }}>
-          Formato argentino: punto para miles, sin decimales.
-        </div>
-        {errores.precio && <p style={{ color: 'red', margin: '5px 0', fontSize: '14px' }}>{errores.precio}</p>}
-      </div>
-
-
-      {/* Campo Categoría */}
-      <div style={{ marginBottom: '15px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-          Categoría:
-        </label>
-        <input
-          type="text"
-          name="categoria"
-          value={producto.categoria}
-          onChange={manejarCambio}
-          disabled={cargando}
-          placeholder="Ej: Electrónica, Ropa, Hogar, etc."
-          style={{
-            width: '100%',
-            padding: '8px',
-            border: '1px solid #ccc',
-            borderRadius: '4px'
-          }}
-        />
-      </div>
-
-      {/* Campo Avatar URL */}
-      <div style={{ marginBottom: '15px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-          Imagen (URL):
-        </label>
-        <input
-          type="text"
-          name="avatar"
-          value={producto.avatar}
-          onChange={manejarCambio}
-          disabled={cargando}
-          placeholder="https://ejemplo.com/avatar.jpg"
-          style={{
-            width: '100%',
-            padding: '8px',
-            border: '1px solid #ccc',
-            borderRadius: '4px'
-          }}
-        />
-      </div>
-
-      {/* Campo Descripción */}
-      <div style={{ marginBottom: '20px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-          Descripción: *
-        </label>
-        <textarea
-          name="descripcion"
-          value={producto.descripcion}
-          onChange={manejarCambio}
-          rows="4"
-          disabled={cargando}
-          maxLength="200"
-          placeholder="Mínimo 10 caracteres, máximo 200 caracteres"
-          style={{
-            width: '100%',
-            padding: '8px',
-            border: `1px solid ${errores.descripcion ? 'red' : '#ccc'}`,
-            borderRadius: '4px',
-            resize: 'vertical'
-          }}
-        />
-        <div style={{
-          fontSize: '12px',
-          color: producto.descripcion.length > 200 ? 'red' : '#666',
-          marginTop: '5px'
-        }}>
-          {producto.descripcion.length}/200 caracteres
-        </div>
-        {errores.descripcion && (
-          <p style={{ color: 'red', margin: '5px 0', fontSize: '14px' }}>{errores.descripcion}</p>
+      <form onSubmit={manejarEnvio} className="p-4 shadow rounded-3 bg-white">
+        {modo === "editar" && productoRecibido && (
+          <p className="text-muted text-center mb-3 small">
+            Editando: **{productoRecibido.nombre}** (ID: {productoRecibido.id})
+          </p>
         )}
-      </div>
-
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
-        <button
-          type="submit"
-          disabled={cargando}
-          style={{
-            flex: 1,
-            padding: '12px',
-            backgroundColor: cargando ? '#ccc' : 'darkolivegreen',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            fontSize: '16px',
-            cursor: cargando ? 'not-allowed' : 'pointer'
-          }}
-        >
-          {cargando
-            ? (modo === "editar" ? 'Actualizando...' : 'Agregando...')
-            : (modo === "editar" ? 'Confirmar Cambios' : 'Agregar Producto')
-          }
-        </button>
        
-        {modo === "editar" && (
-          <button
-            type="button"
-            onClick={cancelarEdicion}
-            style={{
-              flex: 1,
-              padding: '12px',
-              backgroundColor: '#6c757d',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
+        {/* Campo Nombre */}
+        <div className="mb-3">
+          <label className="form-label fw-bold">
+            Nombre: *
+          </label>
+          <input
+            type="text"
+            name="nombre"
+            value={producto.nombre}
+            onChange={manejarCambio}
+            disabled={cargando}
+            className={`form-control ${errores.nombre ? 'is-invalid' : ''}`}
+            placeholder="Ingrese el nombre del producto"
+          />
+          {errores.nombre && <div className="invalid-feedback">{errores.nombre}</div>}
+        </div>
+
+        {/* Campo Precio */}
+        <div className="mb-3">
+          <label className="form-label fw-bold">
+            Precio: *
+          </label>
+          <input
+            type="text"
+            name="precio"
+            value={producto.precio}
+            onChange={manejarCambio}
+            disabled={cargando}
+            placeholder="Ej: 40.000"
+            inputMode="decimal"
+            className={`form-control ${errores.precio ? 'is-invalid' : ''}`}
+          />
+          <small className="form-text text-muted">
+            Formato argentino: punto para miles, sin decimales.
+          </small>
+          {errores.precio && <div className="invalid-feedback">{errores.precio}</div>}
+        </div>
+
+
+        {/* Campo Categoría */}
+        <div className="mb-3">
+          <label className="form-label fw-bold">
+            Categoría:
+          </label>
+          <input
+            type="text"
+            name="categoria"
+            value={producto.categoria}
+            onChange={manejarCambio}
+            disabled={cargando}
+            placeholder="Ej: Electrónica, Ropa, Hogar, etc."
+            className="form-control"
+          />
+        </div>
+
+        {/* Campo Avatar URL */}
+        <div className="mb-3">
+          <label className="form-label fw-bold">
+            Imagen (URL):
+          </label>
+          <input
+            type="text"
+            name="avatar"
+            value={producto.avatar}
+            onChange={manejarCambio}
+            disabled={cargando}
+            placeholder="https://ejemplo.com/imagen.jpg"
+            className="form-control"
+          />
+        </div>
+
+        {/* Campo Descripción */}
+        <div className="mb-4">
+          <label className="form-label fw-bold">
+            Descripción: *
+          </label>
+          <textarea
+            name="descripcion"
+            value={producto.descripcion}
+            onChange={manejarCambio}
+            rows="4"
+            disabled={cargando}
+            maxLength="200"
+            placeholder="Mínimo 10 caracteres, máximo 200 caracteres"
+            className={`form-control ${errores.descripcion ? 'is-invalid' : ''}`}
+            style={{ resize: 'vertical' }}
+          />
+          <small 
+            className={`form-text ${producto.descripcion.length > 200 ? 'text-danger' : 'text-muted'}`}
           >
-            Cancelar
+            {producto.descripcion.length}/200 caracteres
+          </small>
+          {errores.descripcion && (
+            <div className="invalid-feedback">{errores.descripcion}</div>
+          )}
+        </div>
+
+        <div className="d-flex gap-2 mb-3">
+          <button
+            type="submit"
+            disabled={cargando}
+            className={`btn btn-lg flex-fill d-flex align-items-center justify-content-center gap-2 ${modo === "editar" ? 'btn-success' : 'btn-primary'}`}
+          >
+            {cargando 
+                ? <><FaSpinner className="spin-icon" /> {modo === "editar" ? 'Actualizando...' : 'Agregando...'}</>
+                : <><FaSave /> {modo === "editar" ? 'Confirmar Cambios' : 'Agregar Producto'}</>
+            }
           </button>
-        )}
-      </div>
-     
-      <p>(*) Campos obligatorios</p>
-    </form>
+         
+          {modo === "editar" && (
+            <button
+              type="button"
+              onClick={cancelarEdicion}
+              disabled={cargando}
+              className="btn btn-secondary btn-lg flex-fill d-flex align-items-center justify-content-center gap-2"
+            >
+              <FaTimesCircle /> Cancelar
+            </button>
+          )}
+        </div>
+       
+        <p className="text-muted small text-end">(*) Campos obligatorios</p>
+      </form>
+    </FormContainer>
   );
 } export default FormularioProducto;
+
+const FormContainer = styled.div`
+  max-width: 600px;
+  margin: 0 auto;
+
+  .spin-icon {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Colores de los botones para diferenciarlos */
+  .btn-primary {
+    background-color: #3CB371 !important; /* Verde medio mar - para agregar */
+    border-color: #3CB371 !important;
+  }
+  .btn-success {
+    background-color: #2E8B57 !important; /* Verde oscuro mar - para editar */
+    border-color: #2E8B57 !important;
+  }
+`;

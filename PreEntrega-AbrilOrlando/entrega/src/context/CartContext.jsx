@@ -1,31 +1,44 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
-// Crear el contexto
 export const CartContext = createContext();
 
-// Proveedor del contexto
 export function CartProvider({ children }) {
-  // Estado del carrito
   const [carrito, setCarrito] = useState([]);
+  const [cargaCompleta, setCargaCompleta] = useState(false);
 
-  // Funciones para el carrito
+  // CARGA al iniciar
+  useEffect(() => {
+    const carritoGuardado = localStorage.getItem("carrito");
+    if (carritoGuardado) {
+      setCarrito(JSON.parse(carritoGuardado));
+    }
+    setCargaCompleta(true);
+  }, []);
+
+  // SOLO GUARDA después de la carga inicial
+  useEffect(() => {
+    if (cargaCompleta) {
+      localStorage.setItem("carrito", JSON.stringify(carrito));
+    }
+  }, [carrito, cargaCompleta]);
+
+  // Funciones del carrito
   const agregarAlCarrito = (producto) => {
     setCarrito(prevCarrito => {
       const productoExistente = prevCarrito.find(item => item.id === producto.id);
-     
+      
       if (productoExistente) {
-        // Si existe, mapeamos y aumentamos la cantidad
         return prevCarrito.map(item =>
           item.id === producto.id
             ? { ...item, cantidad: (item.cantidad || 1) + 1 }
             : item
         );
       } else {
-        // Si no existe, lo agregamos con cantidad 1
         return [...prevCarrito, { ...producto, cantidad: 1 }];
       }
     });
-    alert(`Producto ${producto.nombre} agregado.`);
+    toast.success("Producto agregado al carrito!");
   };
 
   const vaciarCarrito = () => {
@@ -36,61 +49,96 @@ export function CartProvider({ children }) {
     setCarrito(carrito.filter(item => item.id !== productoId));
   };
 
-   const quitarCantidad = (idProducto) => {
-    const carritoActualizado = carrito.map(producto => {
-      if (producto.id === idProducto) {
-        const cantidadActual = producto.cantidad || 1;
-        // Si la cantidad es 1, al quitarlo lo eliminamos (retornando null)
-        if (cantidadActual === 1) {
-          return null;
-        }
-        // Si es mayor a 1, restamos
-        return { ...producto, cantidad: cantidadActual - 1 };
-      }
-      return producto;
-    }).filter(producto => producto !== null); // Filtramos los nulos
-
-    setCarrito(carritoActualizado);
+  const quitarCantidad = (idProducto) => {
+    setCarrito(
+      carrito
+        .map(producto => {
+          if (producto.id === idProducto) {
+            const cantidadActual = producto.cantidad || 1;
+            if (cantidadActual === 1) return null;
+            return { ...producto, cantidad: cantidadActual - 1 };
+          }
+          return producto;
+        })
+        .filter(producto => producto !== null)
+    );
   };
 
-    const agregarCantidad = (idProducto) => {
-    const nuevoCarrito = carrito.map(producto => {
-      if (producto.id === idProducto) {
-        return {
-          ...producto,
-          cantidad: (producto.cantidad || 1) + 1
-        };
-      }
-      return producto;
+  const agregarCantidad = (idProducto) => {
+    setCarrito(
+      carrito.map(producto =>
+        producto.id === idProducto
+          ? { ...producto, cantidad: (producto.cantidad || 1) + 1 }
+          : producto
+      )
+    );
+  };
+
+  // Función helper para convertir números argentinos (entrada → número)
+  const convertirNumeroArgentino = (v) => {
+    const texto = String(v || 0);
+    return Number(texto.replace(/\./g, '').replace(',', '.')) || 0;
+  };
+
+  // Función para formatear números con puntos cada tres cifras (número → salida)
+  const formatearNumeroArgentino = (numero, decimales = 2) => {
+    // Convertir a número si es string
+    const num = typeof numero === 'string' 
+      ? convertirNumeroArgentino(numero) 
+      : Number(numero);
+    
+    // Formatear con separadores de miles
+    return num.toLocaleString('es-AR', {
+      minimumFractionDigits: decimales,
+      maximumFractionDigits: decimales
     });
-    setCarrito(nuevoCarrito);
   };
 
-  // Calculamos el total
-  const total = carrito.reduce((sum, item) => {
+  // Calcular total
+  const calcularTotal = () => {
+    return carrito.reduce((sum, item) => {
+      const precio = convertirNumeroArgentino(item.precio);
+      const cantidad = item.cantidad || 1;
+      return sum + (precio * cantidad);
+    }, 0);
+  };
+
+  // Total numérico
+  const total = calcularTotal();
+  
+  // Total formateado para mostrar
+  const totalFormateado = formatearNumeroArgentino(total);
+
+  // Función para obtener el subtotal de un item específico
+  const obtenerSubtotalItem = (item) => {
+    const precio = convertirNumeroArgentino(item.precio);
     const cantidad = item.cantidad || 1;
-    return sum + (Number(item.precio) * cantidad);
-  }, 0);
- 
-  // Valor que se provee a todos los componentes
-  const value = {  
+    return precio * cantidad;
+  };
+
+  // Función para obtener el subtotal formateado de un item
+  const obtenerSubtotalItemFormateado = (item) => {
+    return formatearNumeroArgentino(obtenerSubtotalItem(item));
+  };
+
+  const value = {
     carrito,
     agregarAlCarrito,
     vaciarCarrito,
     eliminarDelCarrito,
     agregarCantidad,
     quitarCantidad,
-    total
+    total, // Número para cálculos
+    totalFormateado, // String formateado para mostrar
+    convertirNumeroArgentino, // Para usar en otros componentes
+    formatearNumeroArgentino, // Para usar en otros componentes
+    obtenerSubtotalItem,
+    obtenerSubtotalItemFormateado
   };
 
-  return (
-    <CartContext.Provider value={value}>
-      {children}
-    </CartContext.Provider>
-  );
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
-// Hook personalizado para usar el contexto
 export function useCartContext() {
   const context = useContext(CartContext);
   if (!context) {

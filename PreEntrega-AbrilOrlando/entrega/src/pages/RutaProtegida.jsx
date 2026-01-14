@@ -1,19 +1,22 @@
+import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuthContext } from '../context/AuthContext.jsx';
+import { useAuthContext } from "../context/AuthContext";
 
-function RutaProtegida({ children, admin = false }) {
-  const { usuario } = useAuthContext();
+function RutaProtegida({ children, soloAdmin = false }) {
+  const { usuario, cargando } = useAuthContext();
   const location = useLocation();
 
+  if (cargando) {
+    return <div>Cargando...</div>;
+  }
+ 
   if (!usuario) {
-    return <Navigate to="/iniciar-sesion" state={{ from: location }} replace />;
+
+    return <Navigate to="/iniciar-sesion" state={location.state} replace />;
   }
 
-  if (admin && usuario.role !== 'admin') {
-    return <Navigate to="/" replace />;
+  if (soloAdmin && usuario.nombre !== "admin") {
+    return <Navigate to="/productos" replace />;
   }
-
   return children;
-}
-
-export default RutaProtegida;
+} export default RutaProtegida;

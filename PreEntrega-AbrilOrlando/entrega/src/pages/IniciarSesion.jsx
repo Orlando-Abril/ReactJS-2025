@@ -1,57 +1,93 @@
-import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuthContext } from '../context/AuthContext.jsx';
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
+import { FaSignInAlt, FaTimesCircle, FaUserShield } from 'react-icons/fa';
 
-function IniciarSesion() {
-  const [nombre, setNombre] = useState('');
-  const [email, setEmail] = useState(''); 
-  
+export default function IniciarSesion() {
   const { iniciarSesion } = useAuthContext();
   const navigate = useNavigate();
-  const location = useLocation();
-  
-  const from = location.state?.from?.pathname || "/productos";
+  const ubicacion = useLocation();
 
-  const handleSubmit = (e) => {
+  const [formulario, setFormulario] = useState({ nombre: "", email: "" });
+
+  const manejarEnvio = (e) => {
     e.preventDefault();
-    if (nombre.trim() === '') return alert("Debe ingresar un nombre");
+    
+    if (formulario.nombre === "admin" && formulario.email === "1234@admin") {
 
-    iniciarSesion(nombre); 
-    navigate(from, { replace: true }); 
+      localStorage.setItem("authEmail", formulario.email);
+      iniciarSesion("admin", formulario.email );
+      navigate("/dashboard");
+    }
+
+    else if (
+      formulario.nombre &&
+      formulario.email &&
+      formulario.nombre !== "admin"
+    ) {
+
+        localStorage.setItem("authEmail", formulario.email);
+        iniciarSesion(formulario.nombre, formulario.email) ;
+
+        if (ubicacion.state?.carrito) {
+            navigate("/pagar", { state: { carrito: ubicacion.state.carrito } });
+        } else {
+            navigate("/productos");
+        }
+    } else {
+      alert(
+        "Credenciales incorrectas. Si eres administrador, usa: admin / 1234@admin. De lo contrario, rellena ambos campos."
+      );
+    }
   };
 
   return (
-    <div className="row justify-content-center">
-      <div className="col-lg-6">
-        <div className="card shadow-sm p-4">
-          <h2 className="text-center mb-4">Iniciar Sesión</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="nombre" className="form-label">Nombre (Simulado):</label>
-              <input
-                type="text"
-                id="nombre"
-                className="form-control"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">Email (Simulado):</label>
-              <input
-                type="email"
-                id="email"
-                className="form-control"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <button type="submit" className="btn btn-primary w-100">Ingresar</button>
-          </form>
+    <div className="container my-5" style={{ maxWidth: '450px' }}>
+      <h1 className="h3 text-center mb-4">Inicia sesión para continuar</h1>
+      <form onSubmit={manejarEnvio} className="p-4 shadow rounded-3 bg-white">
+        
+        <div className="mb-3">
+          <label className="form-label">Nombre completo</label>
+          <input 
+            className="form-control"
+            type="text"
+            placeholder="Nombre completo"
+            value={formulario.nombre}
+            onChange={(e) =>
+              setFormulario({ ...formulario, nombre: e.target.value })
+            }
+            required
+          />
         </div>
-      </div>
+        
+        <div className="mb-4">
+          <label className="form-label">Email</label>
+          <input
+            className="form-control"
+            type="email"
+            placeholder="Email"
+            value={formulario.email}
+            onChange={(e) =>
+              setFormulario({ ...formulario, email: e.target.value })
+            }
+            required
+          />
+        </div>
+        
+        <div className="d-grid gap-2">
+          <button type="submit" className="btn btn-primary d-flex align-items-center justify-content-center gap-2">
+            <FaSignInAlt /> Iniciar Sesión
+          </button>
+          <button type="button" onClick={() => navigate("/productos")} className="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-2">
+            <FaTimesCircle /> Cancelar
+          </button>
+        </div>
+
+      </form>
+      
+      <p className="text-center mt-4 small text-muted">
+        <FaUserShield className="me-1" /> Credenciales de administrador: `admin` / `1234@admin`
+      </p>
     </div>
   );
 }
-
-export default IniciarSesion;
